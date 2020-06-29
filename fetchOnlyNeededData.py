@@ -12,28 +12,40 @@ from tqdm import tqdm
 import pandas as pd
 
 
+filterSymbols = True
+
+with open("symbols.txt", "r") as fp:
+    symbolsNeeded = fp.readlines()
+
 df = pd.read_csv("symlinks.csv")
 
-symbols = df["Symbol"]
-urls = df["symbol_url"]
+symbols = list(df["Symbol"])
+urls = list(df["symbol_url"])
 
 moneycontrol = MoneyControlScrapper()
 allCompanyData = {}
 allCompanyNews = {}
 
 for symbol, url in tqdm(zip(symbols, urls)):
+    allow = False
+    if not filterSymbols:
+        allow = True
+        
+    if filterSymbols and symbol in symbolsNeeded:
+        allow = True
     
-    temp = moneycontrol.get_analysis(url)
-    if temp:
-        allCompanyData[symbol] = temp
-    
-    try:
-        scrappe = MoneyControlNews(symbol)
-        allCompanyNews[symbol] = scrappe.fetch_a()
-    
-    except Exception as e:
-        print(str(e))
-        allCompanyNews[symbol] = str(e)
+    if allow:
+        temp = moneycontrol.get_analysis(url)
+        if temp:
+            allCompanyData[symbol] = temp
+        
+        try:
+            scrappe = MoneyControlNews(symbol)
+            allCompanyNews[symbol] = scrappe.fetch_a()
+        
+        except Exception as e:
+            print(str(e))
+            allCompanyNews[symbol] = str(e)
 
 df = pd.DataFrame(allCompanyData).transpose()
 
