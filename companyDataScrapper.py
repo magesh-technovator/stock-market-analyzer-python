@@ -8,15 +8,10 @@ Created on Sat Jun 27 20:51:09 2020
 
 import requests
 from bs4 import BeautifulSoup
-import copy
-import re
-import os
 import json
 from tqdm import tqdm
 import pandas as pd
 import ast
-
-# Libraries required to limit the time taken by a request
 import signal
 from contextlib import contextmanager
 
@@ -85,7 +80,7 @@ class MoneyControlScrapper(object):
         
     def get_swot_analysis(self, soup, data):
         swot = {"S":"Strengths", "W": "Weaknesses", "O": "Opportunities",
-                "T": "Threat"}
+                "T": "Threats"}
         
         swot_div = soup.find("div", {"class": "swot_feature"})
         if not swot_div:
