@@ -8,7 +8,6 @@ Created on Mon Jun 29 07:36:47 2020
 
 import requests
 import bs4
-import pytz
 from tqdm import tqdm
 
 SEARCH_URL = "http://www.moneycontrol.com/stocks/cptmarket/compsearchnew.php?search_data=&cid=&mbsearch_str=&topsearch_type=1&search_str="
